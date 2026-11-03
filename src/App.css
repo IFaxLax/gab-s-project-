@@ -1,0 +1,11 @@
+/* src/App.css */
+.app {
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
+
+/* optional smooth scroll */
+html {
+  scroll-behavior: smooth;
+}

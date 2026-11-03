@@ -1,0 +1,27 @@
+/* src/components/Timeline.css */
+.timeline {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.timeline-item {
+  margin-bottom: 3rem;
+}
+
+/* Sentinel (invisible) – only for IntersectionObserver */
+.timeline-end-sentinel {
+  height: 1px;
+}
+
+/* Responsividad mobile‑first */
+@media (max-width: 600px) {
+  .timeline {
+    padding: 1rem 0.5rem;
+  }
+  .card {
+    margin: 1rem auto;
+  }
+}
+
