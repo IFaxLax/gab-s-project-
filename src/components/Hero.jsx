@@ -21,7 +21,7 @@ function Hero() {
       >
         Desliza hacia abajo y revive los momentos más especiales
       </motion.p>
-      <a href="#timeline" className="hero-scroll-btn" aria-label="Scroll down">
+      <a href="#section1" className="hero-scroll-btn" aria-label="Scroll down">
         ↓
       </a>
     </section>

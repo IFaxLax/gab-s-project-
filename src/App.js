@@ -1,49 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import Hero from './components/Hero';
-import Timeline from './components/Timeline';
-import Proposal from './components/Proposal';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { InView } from "react-intersection-observer";
+import Hero from "./components/Hero";
+import ParallaxSection from "./components/ParallaxSection";
+import Proposal from "./components/Proposal";
+import "./App.css";
 
-function App() {
+export default function App() {
+  const [showProposal, setShowProposal] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
-  // Scroll background transition
+  // Background colour transition (green pastel → soft purple)
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
       const progress = Math.min(scrollY / docHeight, 1);
-      // Interpolate between pastel green and subtle purple
-      const start = [184, 225, 192]; // #b8e1c0
-      const end = [211, 197, 227]; // #d3c5e3
+      const start = [232, 245, 233]; // #e8f5e9
+      const end = [243, 229, 245];   // #f3e5f5
       const r = Math.round(start[0] + (end[0] - start[0]) * progress);
       const g = Math.round(start[1] + (end[1] - start[1]) * progress);
       const b = Math.round(start[2] + (end[2] - start[2]) * progress);
       document.body.style.background = `rgb(${r},${g},${b})`;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // init
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  const [showProposal, setShowProposal] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-
-  // Show proposal once scrolling reaches end
   const handleEndReached = () => setShowProposal(true);
 
   return (
     <div className="app">
       <Hero />
-      <Timeline onEndReached={handleEndReached} />
+
+      {/* Sección 1 – video de fondo */}
+      <ParallaxSection
+        bgType="video"
+        src="/assets/videoBackground.mp4" // <-- reemplaza con tu video en public/assets
+        text="Si cada momento a tu lado es especial..."
+        overlayOpacity={0.4}
+        id="section1"
+      />
+
+      {/* Sección 2 – foto 1 */}
+      <ParallaxSection
+        bgType="image"
+        src="/assets/photo1.jpg" // <-- reemplaza con tu foto1 en public/assets
+        text="...cada recuerdo que creamos es inolvidable."
+        overlayOpacity={0.4}
+        id="section2"
+      />
+
+      {/* Sección 3 – foto 2 */}
+      <ParallaxSection
+        bgType="image"
+        src="/assets/photo2.jpg" // <-- reemplaza con tu foto2 en public/assets
+        text="Y ya no quiero crear recuerdos con nadie más."
+        overlayOpacity={0.4}
+        id="section3"
+      />
+
+      {/* Detector de final de la última sección */}
+      <InView as="div" onChange={(inView) => inView && handleEndReached()} threshold={0.5} />
+
       {showProposal && (
-        <Proposal
-          accepted={accepted}
-          onAccept={() => setAccepted(true)}
-        />
+        <Proposal accepted={accepted} onAccept={() => setAccepted(true)} />
       )}
     </div>
   );
 }
-
-export default App;
