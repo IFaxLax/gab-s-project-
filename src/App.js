@@ -3,28 +3,27 @@ import { InView } from "react-intersection-observer";
 import Hero from "./components/Hero";
 import ParallaxSection from "./components/ParallaxSection";
 import Proposal from "./components/Proposal";
-import "./App.css";
+
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 export default function App() {
   const [showProposal, setShowProposal] = useState(false);
   const [accepted, setAccepted] = useState(false);
 
-  // Background colour transition (green pastel → soft purple)
+  // Background colour transition using GSAP ScrollTrigger (green‑pastel → purple‑soft)
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const progress = Math.min(scrollY / docHeight, 1);
-      const start = [232, 245, 233]; // #e8f5e9
-      const end = [243, 229, 245];   // #f3e5f5
-      const r = Math.round(start[0] + (end[0] - start[0]) * progress);
-      const g = Math.round(start[1] + (end[1] - start[1]) * progress);
-      const b = Math.round(start[2] + (end[2] - start[2]) * progress);
-      document.body.style.background = `rgb(${r},${g},${b})`;
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // init
-    return () => window.removeEventListener("scroll", handleScroll);
+    gsap.registerPlugin(ScrollTrigger);
+    const body = document.body;
+    gsap.to(body, {
+      backgroundColor: "#E8E0F5", // purple‑soft
+      scrollTrigger: {
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      },
+      // initial colour is set via Tailwind (green‑pastel) in index.css
+    });
   }, []);
 
   const handleEndReached = () => setShowProposal(true);

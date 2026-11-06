@@ -1,18 +1,15 @@
-/* src/index.css */
-/* Reset and global styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global resets */
 html, body, #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Poppins', 'Montserrat', sans-serif;
-  background: linear-gradient(to bottom, #b8e1c0, #d3c5e3);
-  /* pastel green to subtle purple */
-  background-attachment: fixed;
-  transition: background 1s ease;
-  color: #333;
+  @apply m-0 p-0 h-full font-sans overscroll-y-none overflow-x-hidden text-gray-800 bg-green-pastel;
+  /* GSAP will animate the background color */
 }
 
-* {
-  box-sizing: border-box;
+/* Ensure smooth scrolling on mobile */
+html {
+  @apply overflow-x-hidden;
 }
 

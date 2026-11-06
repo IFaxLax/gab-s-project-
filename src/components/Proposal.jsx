@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Confetti from 'react-confetti';
-import './Proposal.css';
+import gsap from 'gsap';
 
-function Proposal({ accepted, onAccept }) {
+export default function Proposal({ accepted, onAccept }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [startTime, setStartTime] = useState(null);
+  const proposalRef = useRef(null);
 
-  // When accepted, trigger confetti then hide question after short delay
+  // Entrance animation for the proposal container
+  useEffect(() => {
+    if (proposalRef.current) {
+      gsap.fromTo(
+        proposalRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' }
+      );
+    }
+  }, []);
+
+  // Trigger confetti on acceptance and start timer
   useEffect(() => {
     if (accepted) {
       setShowConfetti(true);
@@ -15,7 +27,7 @@ function Proposal({ accepted, onAccept }) {
         setShowConfetti(false);
         setShowContent(false);
         setStartTime(Date.now());
-      }, 3000); // 3 seconds celebration
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [accepted]);
@@ -37,16 +49,15 @@ function Proposal({ accepted, onAccept }) {
     const seconds = Math.floor((elapsed / 1000) % 60);
 
     return (
-      <div className="timer">
-        <span>{days}d </span>
-        <span>{hours}h </span>
-        <span>{minutes}m </span>
+      <div className="flex space-x-2 text-xl font-mono text-gray-800">
+        <span>{days}d</span>
+        <span>{hours}h</span>
+        <span>{minutes}m</span>
         <span>{seconds}s</span>
       </div>
     );
   };
 
-  // Formatted date for the day of acceptance
   const formattedDate = startTime
     ? new Date(startTime).toLocaleDateString('es-ES', {
         weekday: 'long',
@@ -57,22 +68,27 @@ function Proposal({ accepted, onAccept }) {
     : '';
 
   return (
-    <section className="proposal">
+    <section
+      ref={proposalRef}
+      className="flex flex-col items-center justify-center min-h-screen bg-purple-soft p-6"
+    >
       {showConfetti && <Confetti />}
       {showContent ? (
-        <div className="proposal-card">
-          <h2 className="proposal-question">¿Quieres ser mi novia?</h2>
-          <button className="yes-button" onClick={onAccept}>Sí</button>
+        <div className="bg-white bg-opacity-70 backdrop-blur-lg p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+          <h2 className="text-2xl font-serif text-purple-deep mb-4">¿Quieres ser mi novia?</h2>
+          <button
+            className="px-6 py-3 bg-purple-deep text-white rounded-full hover:bg-purple-deep/90 transition transform hover:scale-105"
+            onClick={onAccept}
+          >
+            Sí
+          </button>
         </div>
       ) : (
-        <div className="proposal-result">
-          <p className="accept-date">Fecha: {formattedDate}</p>
+        <div className="text-center">
+          <p className="mb-4 text-lg text-gray-800">Fecha: {formattedDate}</p>
           <Timer />
         </div>
       )}
     </section>
   );
 }
-
-export default Proposal;
-
